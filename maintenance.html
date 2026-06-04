@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Build Play Contracting — Playground Maintenance & Safety Inspections</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy: #3D5A80;
+  --red: #C0392B;
+  --yellow: #F2B01E;
+  --charcoal: #1a1a1a;
+  --offwhite: #F8F6F2;
+  --mid: #6b6b6b;
+  --light: #edecea;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito Sans', sans-serif; background: var(--offwhite); color: var(--charcoal); overflow-x: hidden; }
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5%; height: 72px; background: white; overflow: visible;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.nav-logo { display: flex; align-items: center; text-decoration: none; }
+.nav-links { display: flex; gap: 36px; }
+.nav-links a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--charcoal); letter-spacing: 0.02em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--navy); }
+.nav-links a.active { color: var(--navy); font-weight: 500; border-bottom: 2px solid var(--navy); padding-bottom: 2px; }
+.nav-cta { background: var(--navy); color: white; border: none; padding: 10px 22px; border-radius: 6px; font-family: 'Nunito Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+.nav-cta:hover { background: #2d4470; }
+.hero { min-height: 100vh; background: var(--navy); display: flex; align-items: center; padding: 120px 5% 80px; position: relative; overflow: hidden; }
+.hero-bg-circle { position: absolute; border-radius: 50%; opacity: 0.06; }
+.hero-bg-circle.c1 { width: 600px; height: 600px; background: white; right: -100px; top: -150px; }
+.hero-bg-circle.c2 { width: 300px; height: 300px; background: var(--yellow); left: -80px; bottom: -80px; }
+.hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; display: flex; align-items: center; gap: 80px; }
+.hero-text { flex: 1; }
+.hero-badge { display: inline-block; background: rgba(242,176,30,0.15); color: var(--yellow); font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 6px 14px; border-radius: 4px; margin-bottom: 24px; border: 1px solid rgba(242,176,30,0.3); }
+.hero h1 { font-family: 'Nunito Sans', sans-serif; font-size: clamp(42px, 5vw, 68px); font-weight: 900; color: white; line-height: 1.1; margin-bottom: 24px; }
+.hero h1 span { color: var(--yellow); }
+.hero p { font-size: 18px; color: rgba(255,255,255,0.7); line-height: 1.7; max-width: 480px; margin-bottom: 40px; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; }
+.btn-primary { background: var(--yellow); color: var(--charcoal); border: none; padding: 14px 28px; border-radius: 6px; font-family: 'Nunito Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; text-decoration: none; transition: transform 0.2s, background 0.2s; display: inline-block; }
+.btn-primary:hover { transform: translateY(-2px); background: #d49a0a; }
+.btn-outline { background: transparent; color: white; border: 1px solid rgba(255,255,255,0.3); padding: 14px 28px; border-radius: 6px; font-family: 'Nunito Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; text-decoration: none; transition: border-color 0.2s, background 0.2s; display: inline-block; }
+.btn-outline:hover { border-color: white; background: rgba(255,255,255,0.07); }
+.hero-graphic { flex-shrink: 0; }
+.trust-bar { background: white; border-bottom: 1px solid var(--light); padding: 20px 5%; }
+.trust-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; }
+.trust-item { display: flex; align-items: center; gap: 10px; }
+.trust-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); flex-shrink: 0; }
+.trust-item span { font-size: 13px; font-weight: 500; color: var(--mid); letter-spacing: 0.02em; }
+section { padding: 96px 5%; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-label { font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+.section-title { font-family: 'Nunito Sans', sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; color: var(--charcoal); line-height: 1.15; margin-bottom: 16px; }
+.section-sub { font-size: 17px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 56px; }
+.services { background: var(--offwhite); }
+.service-group { margin-bottom: 56px; }
+.service-group-title { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--light); }
+.service-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.service-card { background: white; border-radius: 10px; padding: 20px; border: 1px solid rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s; }
+.service-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.service-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--charcoal); }
+.service-card p { font-size: 13px; color: var(--mid); line-height: 1.55; }
+.inspection-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.contact { background: white; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.contact-detail { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+.contact-detail-icon { width: 40px; height: 40px; border-radius: 8px; background: #EEF1F9; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.contact-detail-text span { display: block; font-size: 12px; color: var(--mid); margin-bottom: 2px; }
+.contact-detail-text strong { font-size: 15px; font-weight: 500; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--charcoal); }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 14px; border: 1px solid rgba(0,0,0,0.12); border-radius: 8px; font-family: 'Nunito Sans', sans-serif; font-size: 15px; color: var(--charcoal); background: var(--offwhite); outline: none; transition: border-color 0.2s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--navy); }
+.form-group textarea { min-height: 120px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-submit { width: 100%; background: var(--navy); color: white; border: none; padding: 14px; border-radius: 8px; font-family: 'Nunito Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+.form-submit:hover { background: #2d4470; transform: translateY(-1px); }
+footer { background: var(--charcoal); color: rgba(255,255,255,0.5); padding: 40px 5%; text-align: center; font-size: 13px; }
+footer strong { color: white; }
+.footer-links { display: flex; justify-content: center; gap: 32px; margin-bottom: 16px; flex-wrap: wrap; }
+.footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+.nav-hamburger {
+  display: none; background: none; border: none; cursor: pointer;
+  padding: 8px; flex-direction: column; gap: 5px; flex-shrink: 0;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--charcoal); border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-mobile {
+  display: none; position: fixed; top: 60px; left: 0; right: 0;
+  background: white; border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding: 8px 6% 20px; flex-direction: column; z-index: 99;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.nav-mobile.open { display: flex; }
+.nav-mobile a {
+  text-decoration: none; font-size: 16px; font-weight: 500;
+  color: var(--charcoal); padding: 14px 0;
+  border-bottom: 1px solid var(--light);
+}
+.nav-mobile a:last-child { border-bottom: none; }
+.nav-mobile a.active { color: var(--navy); }
+.nav-mobile-cta {
+  background: var(--navy); color: white !important; border-radius: 6px;
+  padding: 14px !important; text-align: center; margin-top: 8px;
+  border-bottom: none !important;
+}
+@media (max-width: 768px) {
+  nav { padding: 0 4%; height: 60px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .nav-logo img { height: 44px !important; }
+  .nav-cta { display: none; }
+  .hero { padding: 90px 6% 60px; min-height: auto; }
+  .hero-inner { flex-direction: column; gap: 32px; }
+  .hero-graphic { display: none; }
+  .hero h1 { font-size: 36px; }
+  .hero p { font-size: 16px; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-outline { text-align: center; width: 100%; padding: 14px; }
+  .trust-inner { gap: 14px; justify-content: flex-start; }
+  section { padding: 60px 6%; }
+  .section-title { font-size: 28px; }
+  .section-sub { font-size: 15px; margin-bottom: 36px; }
+  .service-cards { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .inspection-cards { grid-template-columns: 1fr !important; }
+  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
+  .gallery-featured { grid-column: span 2 !important; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .hero h1 { font-size: 30px; }
+  .service-cards { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: 1fr !important; }
+  .gallery-featured { grid-column: span 1 !important; aspect-ratio: 16/9 !important; }
+  .trust-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
+  details summary { font-size: 14px; }
+}
+</style>
+<style>
+  /* page-specific overrides */
+  .cpsi-badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    background: #EEF1F9; color: var(--navy);
+    font-size: 11px; font-weight: 500; letter-spacing: 0.06em;
+    padding: 4px 10px; border-radius: 4px; margin-bottom: 10px;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo.png" alt="Build Play Contracting" style="height:88px;"/>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="new-build.html">New Construction</a>
+    <a href="maintenance.html" class="active">Maintenance</a>
+    <a href="maintenance.html#contact">Contact</a>
+    <a href="gallery.html">Gallery</a>
+  </div>
+  <a href="maintenance.html#contact" class="nav-cta">Get a Quote</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-mobile" id="nav-mobile">
+  <a href="index.html">Home</a>
+  <a href="new-build.html">New Construction</a>
+  <a href="maintenance.html" class="active">Maintenance</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="maintenance.html#contact" class="nav-mobile-cta">Get a Quote</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-circle c1"></div>
+  <div class="hero-bg-circle c2"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">CPSI-Certified Inspections</div>
+      <h1>Keeping playgrounds <span>safe</span> and thriving.</h1>
+      <p>Professional playground maintenance, safety inspections, and surface care — so every child plays on equipment that's clean, compliant, and built to last.</p>
+      <div class="hero-actions">
+        <a href="maintenance.html#contact" class="btn-primary">Get a Free Quote</a>
+        <a href="maintenance.html#services" class="btn-outline">View Services</a>
+      </div>
+    </div>
+    <div class="hero-graphic" style="width:460px; height:540px; border-radius:20px; overflow:hidden; flex-shrink:0;">
+      <img src="img1.jpg" alt="Playground maintenance by Build Play Contracting" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item"><div class="trust-dot"></div><span>CPSI-Certified Inspectors</span></div>
+    <div class="trust-item"><div class="trust-dot"></div><span>ASTM · CPSC · ADA Compliant</span></div>
+    <div class="trust-item"><div class="trust-dot"></div><span>Photo Reports on Every Visit</span></div>
+    <div class="trust-item"><div class="trust-dot"></div><span>One-Time & Annual Plans</span></div>
+    <div class="trust-item"><div class="trust-dot"></div><span>Competitively Priced</span></div>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="services" id="services">
+  <div class="section-inner">
+    <div class="fade-up">
+      <p class="section-label">What we do</p>
+      <h2 class="section-title">Full-service playground care.</h2>
+      <p class="section-sub">From power washing to surface conversions, we handle every aspect of playground upkeep so your facilities stay safe and look great.</p>
+    </div>
+
+    <div class="service-group fade-up">
+      <p class="service-group-title">Cleaning & Sanitization</p>
+      <div class="service-cards">
+        <div class="service-card">
+          <h4>Equipment power wash</h4>
+          <p>Full power wash of play structures, ramadas, and amenities using antibacterial sanitizer.</p>
+        </div>
+        <div class="service-card">
+          <h4>Rubber surface wash</h4>
+          <p>Targeted pressure washing of poured-in-place rubber pads and surfaces.</p>
+        </div>
+        <div class="service-card">
+          <h4>Trash & debris removal</h4>
+          <p>Complete site cleanout including litter, debris, and foreign objects.</p>
+        </div>
+        <div class="service-card">
+          <h4>Graffiti removal</h4>
+          <p>Safe removal of graffiti from equipment, structures, and hard surfaces.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-group fade-up">
+      <p class="service-group-title">Surfacing</p>
+      <div class="service-cards">
+        <div class="service-card">
+          <h4>Loose fill maintenance</h4>
+          <p>Sifting, raking, and replenishment of sand, wood fiber chips, and rubber nuggets.</p>
+        </div>
+        <div class="service-card">
+          <h4>Poured-in-place rubber</h4>
+          <p>Repair and maintenance of rubber pads to restore safety and appearance.</p>
+        </div>
+        <div class="service-card">
+          <h4>Sand services</h4>
+          <p>Replenishment, rototilling, power sifting, and sanitization for sand play areas.</p>
+        </div>
+        <div class="service-card">
+          <h4>Surface impact testing</h4>
+          <p>Standardized testing to verify surfaces meet fall height and impact attenuation requirements.</p>
+        </div>
+        <div class="service-card">
+          <h4>Surfacing conversions</h4>
+          <p>Full conversion between surface types — loose fill, poured rubber, or alternatives.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="service-group fade-up">
+      <p class="service-group-title">Structures & Amenities</p>
+      <div class="service-cards">
+        <div class="service-card">
+          <h4>Hardware & fasteners</h4>
+          <p>Inspection and tightening of all bolts, nuts, and fasteners on play equipment.</p>
+        </div>
+        <div class="service-card">
+          <h4>Site amenity repair</h4>
+          <p>Repair of picnic tables, benches, trash cans, pet waste stations, and barbecues.</p>
+        </div>
+        <div class="service-card">
+          <h4>Shade structures</h4>
+          <p>Maintenance and inspection of ramadas, shade canopies, and sail shades.</p>
+        </div>
+        <div class="service-card">
+          <h4>Sports courts</h4>
+          <p>Surfacing maintenance and equipment servicing for multi-use courts.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- INSPECTIONS BAND -->
+<section style="background: var(--navy); padding: 96px 5%;" id="inspections">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center; margin-bottom: 56px;">
+      <p class="section-label" style="color: var(--yellow); text-align:center;">Safety Inspections</p>
+      <h2 class="section-title" style="color: white; text-align:center;">Certified inspections you can count on.</h2>
+      <p style="font-size: 17px; color: rgba(255,255,255,0.65); line-height: 1.7; max-width: 580px; margin: 0 auto 32px;">Every inspection is conducted by a CPSI-certified inspector following ASTM, CPSC, and ADA standards. You receive a comprehensive photo report with itemized repair estimates.</p>
+    </div>
+    <div class="fade-up inspection-cards" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 40px;">
+      <div style="background: rgba(255,255,255,0.07); border-radius: 12px; padding: 28px; border: 1px solid rgba(255,255,255,0.1);">
+        <div style="font-size: 13px; font-weight:500; text-transform:uppercase; letter-spacing:0.1em; color:var(--yellow); margin-bottom:12px;">One-Time</div>
+        <div style="font-size: 16px; font-weight:500; color:white; margin-bottom:8px;">Single inspection, anytime</div>
+        <div style="font-size: 14px; color: rgba(255,255,255,0.55); line-height:1.6;">Perfect for new facilities, due diligence, or a one-off safety check. Schedule whenever you need it.</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.07); border-radius: 12px; padding: 28px; border: 1px solid rgba(255,255,255,0.1);">
+        <div style="font-size: 13px; font-weight:500; text-transform:uppercase; letter-spacing:0.1em; color:var(--yellow); margin-bottom:12px;">Bi-Annual</div>
+        <div style="font-size: 16px; font-weight:500; color:white; margin-bottom:8px;">Two inspections per year</div>
+        <div style="font-size: 14px; color: rgba(255,255,255,0.55); line-height:1.6;">Spring and fall visits to catch seasonal wear and keep your playground compliant year-round.</div>
+      </div>
+      <div style="background: rgba(255,255,255,0.07); border-radius: 12px; padding: 28px; border: 1px solid rgba(255,255,255,0.1);">
+        <div style="font-size: 13px; font-weight:500; text-transform:uppercase; letter-spacing:0.1em; color:var(--yellow); margin-bottom:12px;">Annual</div>
+        <div style="font-size: 16px; font-weight:500; color:white; margin-bottom:8px;">Yearly comprehensive inspection</div>
+        <div style="font-size: 14px; color: rgba(255,255,255,0.55); line-height:1.6;">A thorough once-a-year inspection with a full photo report and itemized repair estimates.</div>
+      </div>
+    </div>
+    <div class="fade-up" style="background: rgba(242,176,30,0.1); border: 1px solid rgba(242,176,30,0.3); border-radius: 12px; padding: 20px 28px; display:flex; align-items:center; gap:16px; max-width:600px; margin: 0 auto 40px;">
+      <span style="font-size:22px;">✓</span>
+      <p style="font-size:15px; color:rgba(255,255,255,0.85); margin:0; line-height:1.6;"><strong style="color:var(--yellow);">Inspections are included</strong> at no extra cost with any scheduled maintenance package.</p>
+    </div>
+    <div style="text-align:center;">
+      <a href="maintenance.html#contact" class="btn-primary">Schedule an Inspection</a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section style="background: white; padding: 96px 5%;" id="about">
+  <div class="section-inner">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items:center;" class="fade-up contact-grid about-grid">
+      <div>
+        <p class="section-label">Who we are</p>
+        <h2 class="section-title">Playground safety is all we do.</h2>
+        <p style="font-size:16px; color:var(--mid); line-height:1.8; margin-bottom:20px;">Build Play Contracting is an Arizona-based playground maintenance and safety inspection company serving parks, schools, HOAs, and municipalities across Arizona.</p>
+        <p style="font-size:16px; color:var(--mid); line-height:1.8; margin-bottom:20px;">Our inspectors are CPSI-certified — the gold standard in playground safety — and every service we provide follows ASTM, CPSC, and ADA guidelines. We don't just maintain playgrounds, we make sure they're genuinely safe for every child who uses them.</p>
+        <p style="font-size:16px; color:var(--mid); line-height:1.8;">From a single power wash to a full annual maintenance contract, we show up on time, document everything, and keep you informed every step of the way.</p>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="background:var(--offwhite); border-radius:12px; padding:24px; display:flex; gap:16px; align-items:flex-start;">
+          <div style="width:44px; height:44px; border-radius:10px; background:#EEF1F9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:500; margin-bottom:4px;">CPSI-Certified</div>
+            <div style="font-size:13px; color:var(--mid); line-height:1.6;">Certified Playground Safety Inspector — the highest credential in the industry.</div>
+          </div>
+        </div>
+        <div style="background:var(--offwhite); border-radius:12px; padding:24px; display:flex; gap:16px; align-items:flex-start;">
+          <div style="width:44px; height:44px; border-radius:10px; background:#EEF1F9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:500; margin-bottom:4px;">Photo Reports Every Visit</div>
+            <div style="font-size:13px; color:var(--mid); line-height:1.6;">Detailed documentation of all work completed and any hazards identified.</div>
+          </div>
+        </div>
+        <div style="background:var(--offwhite); border-radius:12px; padding:24px; display:flex; gap:16px; align-items:flex-start;">
+          <div style="width:44px; height:44px; border-radius:10px; background:#EEF1F9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:500; margin-bottom:4px;">Reliable & On Time</div>
+            <div style="font-size:13px; color:var(--mid); line-height:1.6;">We show up when scheduled and communicate clearly throughout every job.</div>
+          </div>
+        </div>
+        <div style="background:var(--offwhite); border-radius:12px; padding:24px; display:flex; gap:16px; align-items:flex-start;">
+          <div style="width:44px; height:44px; border-radius:10px; background:#EEF1F9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:500; margin-bottom:4px;">Competitively Priced</div>
+            <div style="font-size:13px; color:var(--mid); line-height:1.6;">Fair, transparent pricing tailored to your facility's size and needs — no surprises.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section style="background: var(--offwhite); padding: 96px 5%;" id="gallery">
+  <div class="section-inner">
+    <div class="fade-up">
+      <p class="section-label">Our work</p>
+      <h2 class="section-title">Playgrounds we've transformed.</h2>
+      <p class="section-sub">A look at the maintenance, surfacing, and cleaning work we do for parks, schools, and communities across Arizona.</p>
+    </div>
+    <div class="fade-up gallery-grid" style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 16px;">
+      <div class="gallery-featured" style="grid-column: span 2; border-radius: 12px; overflow:hidden; aspect-ratio: 16/9;">
+        <img src="img1.jpg" alt="Playground under shade sail" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 9/10;">
+        <img src="img2.jpg" alt="Playground equipment close-up" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 4/3;">
+        <img src="img3.jpg" alt="Park bench by the lake" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 4/3;">
+        <img src="img4.jpg" alt="Sports court at golden hour" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 4/3;">
+        <img src="img5.jpg" alt="Communication board installed" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 4/3;">
+        <img src="img6.jpg" alt="Playground structure installation" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 4/3;">
+        <img src="img7.jpg" alt="Playground amenity installation" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="grid-column: span 2; border-radius: 12px; overflow:hidden; aspect-ratio: 16/9;">
+        <img src="img8.jpg" alt="Playground equipment" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 4/3;">
+        <img src="img9.jpg" alt="Playground site" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 4/3;">
+        <img src="img10.jpg" alt="Playground maintenance" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 4/3;">
+        <img src="img11.jpg" alt="Playground surface" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 4/3;">
+        <img src="img12.jpg" alt="Park amenity work" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="grid-column: span 2; border-radius: 12px; overflow:hidden; aspect-ratio: 16/9;">
+        <img src="img13.jpg" alt="Playground project" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 9/10;">
+        <img src="img14.jpg" alt="Playground safety work" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+      <div style="border-radius: 12px; overflow:hidden; aspect-ratio: 4/3;">
+        <img src="img15.jpg" alt="Playground site completed" style="width:100%; height:100%; object-fit:cover; display:block;"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section style="background: white; padding: 96px 5%;">
+  <div class="section-inner">
+    <div class="fade-up" style="max-width:720px; margin:0 auto;">
+      <p class="section-label" style="text-align:center;">FAQ</p>
+      <h2 class="section-title" style="text-align:center; margin-bottom:48px;">Common questions.</h2>
+      <div style="display:flex; flex-direction:column; gap:4px;">
+        <details style="background:var(--offwhite); border-radius:10px; padding:20px 24px; cursor:pointer;">
+          <summary style="font-size:15px; font-weight:500; color:var(--charcoal); list-style:none; display:flex; justify-content:space-between; align-items:center;">How often should a playground be inspected? <span style="color:var(--navy); font-size:20px; font-weight:300;">+</span></summary>
+          <p style="font-size:14px; color:var(--mid); line-height:1.75; margin-top:14px; margin-bottom:0;">CPSC guidelines recommend a comprehensive safety inspection at least once a year. High-traffic facilities benefit from bi-annual inspections. Routine maintenance visits also include a walkthrough for any visible hazards.</p>
+        </details>
+        <details style="background:var(--offwhite); border-radius:10px; padding:20px 24px; cursor:pointer;">
+          <summary style="font-size:15px; font-weight:500; color:var(--charcoal); list-style:none; display:flex; justify-content:space-between; align-items:center;">What does a CPSI inspection include? <span style="color:var(--navy); font-size:20px; font-weight:300;">+</span></summary>
+          <p style="font-size:14px; color:var(--mid); line-height:1.75; margin-top:14px; margin-bottom:0;">A full inspection covers equipment condition, hardware integrity, surfacing depth and impact attenuation, ADA accessibility, age-appropriate design, and entrapment hazards. You receive a comprehensive photo report with an itemized list of any recommended repairs or replacements.</p>
+        </details>
+        <details style="background:var(--offwhite); border-radius:10px; padding:20px 24px; cursor:pointer;">
+          <summary style="font-size:15px; font-weight:500; color:var(--charcoal); list-style:none; display:flex; justify-content:space-between; align-items:center;">What surfacing types do you work with? <span style="color:var(--navy); font-size:20px; font-weight:300;">+</span></summary>
+          <p style="font-size:14px; color:var(--mid); line-height:1.75; margin-top:14px; margin-bottom:0;">We maintain and replenish poured-in-place rubber, wood fiber chips, sand, and rubber nuggets. We also offer full surfacing conversions if you want to switch from one material to another.</p>
+        </details>
+        <details style="background:var(--offwhite); border-radius:10px; padding:20px 24px; cursor:pointer;">
+          <summary style="font-size:15px; font-weight:500; color:var(--charcoal); list-style:none; display:flex; justify-content:space-between; align-items:center;">Do you work with HOAs and municipalities? <span style="color:var(--navy); font-size:20px; font-weight:300;">+</span></summary>
+          <p style="font-size:14px; color:var(--mid); line-height:1.75; margin-top:14px; margin-bottom:0;">Yes — we regularly service HOA communities, city parks, schools, and apartment complexes across Arizona. We can set up recurring maintenance schedules or provide one-time services as needed.</p>
+        </details>
+        <details style="background:var(--offwhite); border-radius:10px; padding:20px 24px; cursor:pointer;">
+          <summary style="font-size:15px; font-weight:500; color:var(--charcoal); list-style:none; display:flex; justify-content:space-between; align-items:center;">Is an inspection included with maintenance? <span style="color:var(--navy); font-size:20px; font-weight:300;">+</span></summary>
+          <p style="font-size:14px; color:var(--mid); line-height:1.75; margin-top:14px; margin-bottom:0;">Yes. Every scheduled maintenance visit includes a safety walkthrough at no extra charge. If a more thorough CPSI-certified inspection is needed, we can add that to any visit.</p>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICE AREA -->
+<section id="service-area" style="background: var(--offwhite); padding: 80px 5%;">
+  <div class="section-inner">
+    <div class="fade-up" style="text-align:center; margin-bottom: 48px;">
+      <p class="section-label" style="text-align:center;">Where we work</p>
+      <h2 class="section-title" style="text-align:center;">Proudly serving Arizona.</h2>
+      <p style="font-size:16px; color:var(--mid); max-width:480px; margin: 0 auto;">We work statewide — from Phoenix and Tucson to Flagstaff, Prescott, and beyond.</p>
+    </div>
+    <div class="fade-up" style="display:flex; flex-wrap:wrap; gap:12px; justify-content:center;">
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--red); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Phoenix</span>
+      </div>
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--navy); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Tucson</span>
+      </div>
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--yellow); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Mesa</span>
+      </div>
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--red); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Chandler</span>
+      </div>
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--navy); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Scottsdale</span>
+      </div>
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--yellow); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Glendale</span>
+      </div>
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--red); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Gilbert</span>
+      </div>
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--navy); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Tempe</span>
+      </div>
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--yellow); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Flagstaff</span>
+      </div>
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--red); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Prescott</span>
+      </div>
+      <div style="background:white; border:1px solid rgba(0,0,0,0.07); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.05);">
+        <span style="width:10px; height:10px; border-radius:50%; background:var(--navy); flex-shrink:0;"></span>
+        <span style="font-size:15px; font-weight:500; color:var(--charcoal);">Yuma</span>
+      </div>
+      <div style="background:var(--navy); border-radius:50px; padding:12px 24px; display:flex; align-items:center; gap:10px; box-shadow:0 2px 8px rgba(0,0,0,0.1);">
+        <span style="font-size:15px; font-weight:500; color:white;">+ Statewide Coverage</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="fade-up">
+        <p class="section-label">Get in touch</p>
+        <h2 class="section-title">Request a quote.</h2>
+        <p style="font-size: 16px; color: var(--mid); line-height: 1.7; margin-bottom: 40px;">Tell us about your facility and we'll put together a customized maintenance or inspection plan that fits your needs and budget.</p>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.15 6.15l1.28-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>Phone</span>
+            <strong><a href="tel:4806398437" style="color:inherit; text-decoration:none;">(480) 639-8437</a></strong>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>Email</span>
+            <strong><a href="mailto:sales@buildplaycontracting.com" style="color:inherit; text-decoration:none;">sales@buildplaycontracting.com</a></strong>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>Service Area</span>
+            <strong>Arizona</strong>
+          </div>
+        </div>
+      </div>
+
+      <div class="fade-up">
+        <div style="background: var(--offwhite); border-radius: 14px; padding: 36px;">
+          <form name="quote-request" method="POST" data-netlify="true">
+            <div class="form-row">
+              <div class="form-group">
+                <label>First name</label>
+                <input type="text" name="first_name" placeholder="John" required/>
+              </div>
+              <div class="form-group">
+                <label>Last name</label>
+                <input type="text" name="last_name" placeholder="Smith" required/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" name="email" placeholder="john@example.com" required/>
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="tel" name="phone" placeholder="(480) 639-8437"/>
+            </div>
+            <div class="form-group">
+              <label>What are you looking for?</label>
+              <textarea name="message" placeholder="Tell us about your facility, what services you need, or any specific concerns..."></textarea>
+            </div>
+            <button type="submit" class="form-submit">Send Request →</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="new-build.html">New Construction</a>
+    <a href="maintenance.html">Maintenance</a>
+    <a href="maintenance.html#contact">Contact</a>
+    <a href="gallery.html">Gallery</a>
+  </div>
+  <p><strong>Build Play Contracting</strong> · Playground Maintenance & Safety Inspections · Phoenix, AZ</p>
+  <p style="margin-top: 8px;">CPSI-Certified · ASTM · CPSC · ADA Standards</p>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  const hamburger = document.getElementById('hamburger');
+  const navMobile = document.getElementById('nav-mobile');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navMobile.classList.toggle('open');
+  });
+  navMobile.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navMobile.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>

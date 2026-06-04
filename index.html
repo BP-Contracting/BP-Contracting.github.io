@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Build Play Contracting — Playground Services</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy: #3D5A80;
+  --red: #C0392B;
+  --yellow: #F2B01E;
+  --charcoal: #1a1a1a;
+  --offwhite: #F8F6F2;
+  --mid: #6b6b6b;
+  --light: #edecea;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito Sans', sans-serif; background: var(--offwhite); color: var(--charcoal); overflow-x: hidden; }
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5%; height: 72px; background: white; overflow: visible;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.nav-logo { display: flex; align-items: center; text-decoration: none; }
+.nav-links { display: flex; gap: 36px; }
+.nav-links a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--charcoal); letter-spacing: 0.02em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--navy); }
+.nav-links a.active { color: var(--navy); font-weight: 500; border-bottom: 2px solid var(--navy); padding-bottom: 2px; }
+.nav-cta {
+  background: var(--navy); color: white; border: none; padding: 10px 22px;
+  border-radius: 6px; font-family: 'Nunito Sans', sans-serif; font-size: 14px; font-weight: 500;
+  cursor: pointer; text-decoration: none; transition: background 0.2s;
+}
+.nav-cta:hover { background: #2d4470; }
+.hero {
+  min-height: 100vh;
+  display: flex; align-items: flex-start; justify-content: center; padding: 160px 5% 80px;
+  position: relative; overflow: hidden;
+  background: var(--charcoal);
+}
+.hero-bg-img {
+  position: absolute; inset: 0;
+  background: url('hero4.jpg') center 65% / cover no-repeat;
+  z-index: 0;
+}
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to right, rgba(0,0,0,0.1) 40%, rgba(0,0,0,0.0) 100%);
+  z-index: 1;
+}
+.hero-inner { max-width: 1100px; margin: 0 auto; width: 100%; position: relative; z-index: 2; }
+.hero-text { max-width: 100%; text-align: center; }
+.hero-badge {
+  display: inline-block; background: rgba(242,176,30,0.2); color: var(--yellow);
+  font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 4px; margin-bottom: 24px;
+  border: 1px solid rgba(242,176,30,0.4);
+}
+.hero h1 { font-family: 'Nunito Sans', sans-serif; font-size: clamp(42px, 5vw, 72px); font-weight: 900; color: white; line-height: 1.08; margin-bottom: 24px; }
+.hero h1 span { color: white; }
+.hero p { font-size: 18px; color: rgba(255,255,255,0.75); line-height: 1.7; max-width: 480px; margin-bottom: 40px; }
+.hero-actions { display: flex; gap: 16px; flex-wrap: wrap; justify-content: center; }
+.btn-primary {
+  background: var(--yellow); color: var(--charcoal); border: none;
+  padding: 14px 28px; border-radius: 6px; font-family: 'Nunito Sans', sans-serif;
+  font-size: 15px; font-weight: 500; cursor: pointer; text-decoration: none;
+  transition: transform 0.2s, background 0.2s; display: inline-block;
+}
+.btn-primary:hover { transform: translateY(-2px); background: #d49a0a; }
+.btn-outline {
+  background: transparent; color: white; border: 1px solid rgba(255,255,255,0.4);
+  padding: 14px 28px; border-radius: 6px; font-family: 'Nunito Sans', sans-serif;
+  font-size: 15px; font-weight: 500; cursor: pointer; text-decoration: none;
+  transition: border-color 0.2s, background 0.2s; display: inline-block;
+}
+.btn-outline:hover { border-color: white; background: rgba(255,255,255,0.1); }
+.hero-graphic { display: none; }
+.trust-bar { background: white; border-bottom: 1px solid var(--light); padding: 20px 5%; }
+.trust-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: center; gap: 48px; flex-wrap: wrap; }
+.trust-item { display: flex; align-items: center; gap: 10px; }
+.trust-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--yellow); flex-shrink: 0; }
+.trust-item span { font-size: 13px; font-weight: 500; color: var(--mid); letter-spacing: 0.02em; }
+section { padding: 96px 5%; }
+.section-inner { max-width: 1100px; margin: 0 auto; }
+.section-label { font-size: 12px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 12px; }
+.section-title { font-family: 'Nunito Sans', sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; color: var(--charcoal); line-height: 1.15; margin-bottom: 16px; }
+.section-sub { font-size: 17px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 56px; }
+.services { background: var(--offwhite); }
+.service-group { margin-bottom: 56px; }
+.service-group-title { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--light); }
+.service-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+.service-card { background: white; border-radius: 10px; padding: 20px; border: 1px solid rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s; }
+.service-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.service-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--charcoal); }
+.service-card p { font-size: 13px; color: var(--mid); line-height: 1.55; }
+.page-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-top: 56px; }
+.page-card { border-radius: 16px; overflow: hidden; border: 1px solid rgba(0,0,0,0.07); text-decoration: none; color: inherit; transition: transform 0.2s, box-shadow 0.2s; display: flex; flex-direction: column; }
+.page-card:hover { transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.1); }
+.page-card-img { height: 220px; overflow: hidden; }
+.page-card-img img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.page-card:hover .page-card-img img { transform: scale(1.04); }
+.page-card-body { padding: 20px; background: white; flex: 1; display: flex; flex-direction: column; }
+.page-card-label { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--red); margin-bottom: 10px; }
+.page-card-body h3 { font-family: 'Nunito Sans', sans-serif; font-size: 20px; font-weight: 700; margin-bottom: 8px; }
+.page-card-body p { font-size: 13px; color: var(--mid); line-height: 1.6; flex: 1; }
+.page-card-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 12px; font-size: 13px; font-weight: 500; color: var(--navy); }
+.cta-band { background: var(--charcoal); padding: 72px 5%; }
+.cta-band-inner { max-width: 1100px; margin: 0 auto; display: flex; align-items: center; justify-content: space-between; gap: 40px; flex-wrap: wrap; }
+.cta-band h2 { font-family: 'Nunito Sans', sans-serif; font-size: clamp(28px, 3vw, 40px); font-weight: 700; color: white; }
+.cta-band h2 span { color: var(--yellow); }
+.cta-band p { font-size: 16px; color: rgba(255,255,255,0.6); margin-top: 8px; max-width: 420px; }
+.contact { background: white; }
+.contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
+.contact-detail { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 20px; }
+.contact-detail-icon { width: 40px; height: 40px; border-radius: 8px; background: #EEF1F9; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.contact-detail-text span { display: block; font-size: 12px; color: var(--mid); margin-bottom: 2px; }
+.contact-detail-text strong { font-size: 15px; font-weight: 500; }
+.form-group { margin-bottom: 20px; }
+.form-group label { display: block; font-size: 13px; font-weight: 500; margin-bottom: 6px; color: var(--charcoal); }
+.form-group input, .form-group select, .form-group textarea { width: 100%; padding: 12px 14px; border: 1px solid rgba(0,0,0,0.12); border-radius: 8px; font-family: 'Nunito Sans', sans-serif; font-size: 15px; color: var(--charcoal); background: var(--offwhite); outline: none; transition: border-color 0.2s; }
+.form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--navy); }
+.form-group textarea { min-height: 120px; resize: vertical; }
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.form-submit { width: 100%; background: var(--navy); color: white; border: none; padding: 14px; border-radius: 8px; font-family: 'Nunito Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: background 0.2s, transform 0.2s; }
+.form-submit:hover { background: #2d4470; transform: translateY(-1px); }
+footer { background: var(--charcoal); color: rgba(255,255,255,0.5); padding: 40px 5%; text-align: center; font-size: 13px; }
+footer strong { color: white; }
+.footer-links { display: flex; justify-content: center; gap: 32px; margin-bottom: 16px; flex-wrap: wrap; }
+.footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+.about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+.nav-hamburger {
+  display: none; background: none; border: none; cursor: pointer;
+  padding: 8px; flex-direction: column; gap: 5px; flex-shrink: 0;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--charcoal); border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-mobile {
+  display: none; position: fixed; top: 60px; left: 0; right: 0;
+  background: white; border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding: 8px 6% 20px; flex-direction: column; z-index: 99;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.nav-mobile.open { display: flex; }
+.nav-mobile a {
+  text-decoration: none; font-size: 16px; font-weight: 500;
+  color: var(--charcoal); padding: 14px 0;
+  border-bottom: 1px solid var(--light);
+}
+.nav-mobile a:last-child { border-bottom: none; }
+.nav-mobile a.active { color: var(--navy); }
+.nav-mobile-cta {
+  background: var(--navy); color: white !important; border-radius: 6px;
+  padding: 14px !important; text-align: center; margin-top: 8px;
+  border-bottom: none !important;
+}
+@media (max-width: 768px) {
+  nav { padding: 0 4%; height: 60px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .nav-logo img { height: 44px !important; }
+  .nav-cta { display: none; }
+  .hero { padding: 100px 6% 60px; min-height: 100vh; }
+  .hero-inner { flex-direction: column; gap: 32px; }
+  .hero-graphic { display: none; }
+  .hero h1 { font-size: 36px; }
+  .hero p { font-size: 16px; }
+  .hero-actions { flex-direction: column; }
+  .btn-primary, .btn-outline { text-align: center; width: 100%; padding: 14px; }
+  .trust-inner { gap: 14px; justify-content: flex-start; }
+  section { padding: 60px 6%; }
+  .section-title { font-size: 28px; }
+  .section-sub { font-size: 15px; margin-bottom: 36px; }
+  .service-cards { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .page-cards { grid-template-columns: 1fr; }
+  .page-card-img { height: 140px; }
+  .page-card-body { padding: 16px; }
+  .page-card-body h3 { font-size: 18px; margin-bottom: 6px; }
+  .page-card-body p { font-size: 13px; }
+  .page-card-link { margin-top: 12px; font-size: 13px; }
+  .gallery-grid { grid-template-columns: 1fr 1fr !important; }
+  .gallery-featured { grid-column: span 2 !important; }
+  .about-grid { grid-template-columns: 1fr !important; gap: 40px !important; }
+  .contact-grid { grid-template-columns: 1fr; gap: 40px; }
+  .form-row { grid-template-columns: 1fr; }
+}
+@media (max-width: 480px) {
+  .hero h1 { font-size: 30px; }
+  .service-cards { grid-template-columns: 1fr; }
+  .gallery-grid { grid-template-columns: 1fr !important; }
+  .gallery-featured { grid-column: span 1 !important; aspect-ratio: 16/9 !important; }
+  .trust-inner { flex-direction: column; align-items: flex-start; gap: 10px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo.png" alt="Build Play Contracting" style="height:88px;"/>
+  </a>
+  <div class="nav-links">
+    <a href="index.html" class="active">Home</a>
+    <a href="new-build.html">New Construction</a>
+    <a href="maintenance.html">Maintenance</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="gallery.html">Gallery</a>
+  </div>
+  <a href="index.html#contact" class="nav-cta">Get a Quote</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-mobile" id="nav-mobile">
+  <a href="index.html" class="active">Home</a>
+  <a href="new-build.html">New Construction</a>
+  <a href="maintenance.html">Maintenance</a>
+  <a href="gallery.html">Gallery</a>
+  <a href="index.html#contact" class="nav-mobile-cta">Get a Quote</a>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg-img"></div>
+  <div class="hero-overlay"></div>
+  <div class="hero-inner">
+    <div class="hero-text">
+      <div class="hero-badge">New Construction & Maintenance</div>
+      <h1>Built Safe. <span>Kept Safe.</span></h1>
+      <div class="hero-actions">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SERVICES OVERVIEW -->
+<section id="services" style="background: var(--offwhite);">
+  <div class="section-inner">
+    <div class="fade-up">
+      <p class="section-label">What we do</p>
+      <h2 class="section-title">Proudly Serving Arizona.</h2>
+      <p class="section-sub">Whether you're starting from scratch or keeping an existing playground in top shape, Build Play Contracting has you covered.</p>
+    </div>
+    <div class="page-cards fade-up">
+      <a href="new-build.html" class="page-card">
+        <div class="page-card-img">
+          <img src="img6.jpg" alt="New playground build"/>
+        </div>
+        <div class="page-card-body">
+          <h3>New Construction</h3>
+          <p>We build playgrounds from the ground up — equipment, surfacing, shade structures, and more.</p>
+          <span class="page-card-link">Learn more →</span>
+        </div>
+      </a>
+      <a href="maintenance.html" class="page-card">
+        <div class="page-card-img">
+          <img src="img3.jpg" alt="Playground maintenance"/>
+        </div>
+        <div class="page-card-body">
+          <h3>Maintenance</h3>
+          <p>CPSI-certified inspections, cleaning, surfacing repair, and full-service upkeep year-round.</p>
+          <span class="page-card-link">Learn more →</span>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section style="background: white; padding: 96px 5%;" id="about">
+  <div class="section-inner">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items:center;" class="fade-up about-grid">
+      <div>
+        <p class="section-label">Who we are</p>
+        <h2 class="section-title">Arizona-born builders, built on experience.</h2>
+        <p style="font-size:16px; color:var(--mid); line-height:1.8; margin-bottom:20px;">At Build Play Contracting, we are Arizona-born builders with a passion for creating safe, functional, and lasting outdoor spaces. Specializing in playground installations, shade structures, site furnishings, and surfacing systems, we bring experience, craftsmanship, and attention to detail to every project we undertake.</p>
+        <p style="font-size:16px; color:var(--mid); line-height:1.8; margin-bottom:20px;">Our team combines more than 10 years of construction industry experience, giving us the knowledge and expertise to successfully manage projects of all sizes. As Arizona locals, we understand the unique challenges of building in our desert environment and take pride in helping schools, municipalities, parks, HOAs, and communities create spaces where people can gather, play, and connect.</p>
+        <div id="about-more" style="display:none;">
+          <p style="font-size:16px; color:var(--mid); line-height:1.8; margin-bottom:20px;">What truly sets us apart is our hands-on approach. We are actively involved in every project from start to finish, ensuring quality workmanship, clear communication, and a commitment to exceeding expectations. Our team is CPSI (Certified Playground Safety Inspector) certified, providing an added level of expertise and dedication to safety on every playground we build and maintain.</p>
+          <p style="font-size:16px; color:var(--mid); line-height:1.8; margin-bottom:20px;">We don't just build projects—we build relationships. Our team is driven by professionalism, integrity, and a genuine passion for what we do. Whether we're installing a new playground, constructing a shade structure, or revitalizing an outdoor space, our goal remains the same: delivering exceptional results that serve Arizona communities for years to come.</p>
+        </div>
+        <button onclick="const m=document.getElementById('about-more'); const open=m.style.display==='block'; m.style.display=open?'none':'block'; this.textContent=open?'Read more →':'Show less ↑';" style="background:none; border:none; color:var(--navy); font-family:'Nunito Sans',sans-serif; font-size:15px; font-weight:500; cursor:pointer; padding:0; margin-top:4px;">Read more →</button>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:16px;">
+        <div style="background:var(--offwhite); border-radius:12px; padding:24px; display:flex; gap:16px; align-items:flex-start;">
+          <div style="width:44px; height:44px; border-radius:10px; background:#EEF1F9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:500; margin-bottom:4px;">CPSI-Certified</div>
+            <div style="font-size:13px; color:var(--mid); line-height:1.6;">Certified Playground Safety Inspector — the highest credential in the industry.</div>
+          </div>
+        </div>
+        <div style="background:var(--offwhite); border-radius:12px; padding:24px; display:flex; gap:16px; align-items:flex-start;">
+          <div style="width:44px; height:44px; border-radius:10px; background:#EEF1F9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8m-4-4v4"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:500; margin-bottom:4px;">Full Installation</div>
+            <div style="font-size:13px; color:var(--mid); line-height:1.6;">Playground equipment, shade structures, site furnishings, excavation, and more — built and installed to last.</div>
+          </div>
+        </div>
+        <div style="background:var(--offwhite); border-radius:12px; padding:24px; display:flex; gap:16px; align-items:flex-start;">
+          <div style="width:44px; height:44px; border-radius:10px; background:#EEF1F9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:500; margin-bottom:4px;">Photo Reports Every Visit</div>
+            <div style="font-size:13px; color:var(--mid); line-height:1.6;">Detailed documentation of all work completed and any hazards identified.</div>
+          </div>
+        </div>
+        <div style="background:var(--offwhite); border-radius:12px; padding:24px; display:flex; gap:16px; align-items:flex-start;">
+          <div style="width:44px; height:44px; border-radius:10px; background:#EEF1F9; display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+          </div>
+          <div>
+            <div style="font-size:15px; font-weight:500; margin-bottom:4px;">Competitively Priced</div>
+            <div style="font-size:13px; color:var(--mid); line-height:1.6;">Fair, transparent pricing tailored to your facility's size and needs — no surprises.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACT -->
+<section class="contact" id="contact">
+  <div class="section-inner">
+    <div class="contact-grid">
+      <div class="fade-up">
+        <p class="section-label">Get in touch</p>
+        <h2 class="section-title">Request a quote.</h2>
+        <p style="font-size: 16px; color: var(--mid); line-height: 1.7; margin-bottom: 40px;">Tell us about your project — whether it's a brand new build or ongoing maintenance — and we'll put together a plan that fits your needs and budget.</p>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.8 19.79 19.79 0 01.22 1.18 2 2 0 012.18 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.91 7.91a16 16 0 006.15 6.15l1.28-1.28a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>Phone</span>
+            <strong><a href="tel:4806398437" style="color:inherit; text-decoration:none;">(480) 639-8437</a></strong>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>Email</span>
+            <strong><a href="mailto:sales@buildplaycontracting.com" style="color:inherit; text-decoration:none;">sales@buildplaycontracting.com</a></strong>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-detail-icon">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D5A80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          </div>
+          <div class="contact-detail-text">
+            <span>Service Area</span>
+            <strong>Arizona</strong>
+          </div>
+        </div>
+      </div>
+      <div class="fade-up">
+        <div style="background: var(--offwhite); border-radius: 14px; padding: 36px;">
+          <form name="quote-request" method="POST" data-netlify="true">
+            <div class="form-row">
+              <div class="form-group">
+                <label>First name</label>
+                <input type="text" name="first_name" placeholder="John" required/>
+              </div>
+              <div class="form-group">
+                <label>Last name</label>
+                <input type="text" name="last_name" placeholder="Smith" required/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label>Email</label>
+              <input type="email" name="email" placeholder="john@example.com" required/>
+            </div>
+            <div class="form-group">
+              <label>Phone</label>
+              <input type="tel" name="phone" placeholder="(480) 555-0000"/>
+            </div>
+            <div class="form-group">
+              <label>What are you looking for?</label>
+              <select name="service_type">
+                <option value="">Select a service...</option>
+                <option value="new-build">New Build</option>
+                <option value="maintenance">Maintenance</option>
+                <option value="inspection">Safety Inspection</option>
+                <option value="other">Other / Not sure</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label>Tell us about your project</label>
+              <textarea name="message" placeholder="Describe your facility, what you need, or any specific concerns..."></textarea>
+            </div>
+            <button type="submit" class="form-submit">Send Request →</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="new-build.html">New Construction</a>
+    <a href="maintenance.html">Maintenance</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="gallery.html">Gallery</a>
+  </div>
+  <p><strong>Build Play Contracting</strong> · Playground Services · Phoenix, AZ</p>
+  <p style="margin-top: 8px;">CPSI-Certified · ASTM · CPSC · ADA Standards</p>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  const hamburger = document.getElementById('hamburger');
+  const navMobile = document.getElementById('nav-mobile');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navMobile.classList.toggle('open');
+  });
+  navMobile.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navMobile.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>

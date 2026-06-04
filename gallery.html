@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Gallery — Build Play Contracting</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;500;600;700;900&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy: #1B2E6E;
+  --red: #C0392B;
+  --yellow: #F2B01E;
+  --charcoal: #1a1a1a;
+  --offwhite: #F7F6F2;
+  --mid: #6b6b6b;
+  --light: #edecea;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body { font-family: 'Nunito Sans', sans-serif; background: var(--offwhite); color: var(--charcoal); overflow-x: hidden; }
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 5%; height: 72px; background: white; overflow: visible;
+  border-bottom: 1px solid rgba(0,0,0,0.07);
+}
+.nav-logo { display: flex; align-items: center; text-decoration: none; }
+.nav-links { display: flex; gap: 36px; }
+.nav-links a { text-decoration: none; font-size: 14px; font-weight: 500; color: var(--charcoal); letter-spacing: 0.02em; transition: color 0.2s; }
+.nav-links a:hover { color: var(--navy); }
+.nav-links a.active { color: var(--navy); font-weight: 500; border-bottom: 2px solid var(--navy); padding-bottom: 2px; }
+.nav-cta { background: var(--navy); color: white; border: none; padding: 10px 22px; border-radius: 6px; font-family: 'Nunito Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; text-decoration: none; transition: background 0.2s; }
+.nav-cta:hover { background: #142258; }
+.nav-hamburger {
+  display: none; background: none; border: none; cursor: pointer;
+  padding: 8px; flex-direction: column; gap: 5px; flex-shrink: 0;
+}
+.nav-hamburger span {
+  display: block; width: 22px; height: 2px;
+  background: var(--charcoal); border-radius: 2px;
+  transition: transform 0.25s, opacity 0.25s;
+}
+.nav-hamburger.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-hamburger.open span:nth-child(2) { opacity: 0; }
+.nav-hamburger.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+.nav-mobile {
+  display: none; position: fixed; top: 60px; left: 0; right: 0;
+  background: white; border-bottom: 1px solid rgba(0,0,0,0.08);
+  padding: 8px 6% 20px; flex-direction: column; z-index: 99;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+}
+.nav-mobile.open { display: flex; }
+.nav-mobile a {
+  text-decoration: none; font-size: 16px; font-weight: 500;
+  color: var(--charcoal); padding: 14px 0;
+  border-bottom: 1px solid var(--light);
+}
+.nav-mobile a:last-child { border-bottom: none; }
+.nav-mobile a.active { color: var(--navy); }
+.nav-mobile-cta {
+  background: var(--navy); color: white !important; border-radius: 6px;
+  padding: 14px !important; text-align: center; margin-top: 8px;
+  border-bottom: none !important;
+}
+.page-header {
+  padding: 140px 5% 60px;
+  background: var(--navy);
+  text-align: center;
+}
+.page-header h1 { font-size: clamp(36px, 5vw, 56px); font-weight: 900; color: white; margin-bottom: 12px; }
+.page-header p { font-size: 17px; color: rgba(255,255,255,0.65); }
+.gallery-section { padding: 72px 5%; }
+.gallery-section .section-inner { max-width: 1200px; margin: 0 auto; }
+.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+.gallery-item { border-radius: 12px; overflow: hidden; aspect-ratio: 4/3; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s; }
+.gallery-item:hover img { transform: scale(1.04); }
+.gallery-item.wide { grid-column: span 2; aspect-ratio: 16/9; }
+.gallery-item.tall { aspect-ratio: 3/4; }
+footer { background: var(--charcoal); color: rgba(255,255,255,0.5); padding: 40px 5%; text-align: center; font-size: 13px; }
+footer strong { color: white; }
+.footer-links { display: flex; justify-content: center; gap: 32px; margin-bottom: 16px; flex-wrap: wrap; }
+.footer-links a { color: rgba(255,255,255,0.5); text-decoration: none; font-size: 13px; transition: color 0.2s; }
+.footer-links a:hover { color: white; }
+.fade-up { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-up.visible { opacity: 1; transform: translateY(0); }
+@media (max-width: 768px) {
+  nav { padding: 0 4%; height: 60px; }
+  .nav-links { display: none; }
+  .nav-hamburger { display: flex; }
+  .nav-logo img { height: 44px !important; }
+  .nav-cta { display: none; }
+  .page-header { padding: 100px 6% 48px; }
+  .gallery-section { padding: 48px 4%; }
+  .gallery-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .gallery-item.wide { grid-column: span 2; }
+}
+@media (max-width: 480px) {
+  .gallery-grid { grid-template-columns: 1fr; gap: 10px; }
+  .gallery-item.wide { grid-column: span 1; aspect-ratio: 4/3; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="index.html" class="nav-logo">
+    <img src="logo.png" alt="Build Play Contracting" style="height:88px;"/>
+  </a>
+  <div class="nav-links">
+    <a href="index.html">Home</a>
+    <a href="new-build.html">New Construction</a>
+    <a href="maintenance.html">Maintenance</a>
+    <a href="index.html#contact">Contact</a>
+    <a href="gallery.html" class="active">Gallery</a>
+  </div>
+  <a href="index.html#contact" class="nav-cta">Get a Quote</a>
+  <button class="nav-hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+<div class="nav-mobile" id="nav-mobile">
+  <a href="index.html">Home</a>
+  <a href="new-build.html">New Construction</a>
+  <a href="maintenance.html">Maintenance</a>
+  <a href="index.html#contact">Contact</a>
+  <a href="gallery.html" class="active">Gallery</a>
+  <a href="index.html#contact" class="nav-mobile-cta">Get a Quote</a>
+</div>
+
+<!-- HEADER -->
+<div class="page-header">
+  <h1>Our Work</h1>
+  <p>New builds, maintenance, surfacing, and more across Arizona.</p>
+</div>
+
+<!-- GALLERY -->
+<section class="gallery-section">
+  <div class="section-inner">
+    <div class="gallery-grid fade-up">
+      <div class="gallery-item wide">
+        <img src="img1.jpg" alt="Playground under shade sail"/>
+      </div>
+      <div class="gallery-item tall">
+        <img src="img2.jpg" alt="Playground equipment"/>
+      </div>
+      <div class="gallery-item">
+        <img src="img3.jpg" alt="Park bench"/>
+      </div>
+      <div class="gallery-item">
+        <img src="img4.jpg" alt="Sports court"/>
+      </div>
+      <div class="gallery-item">
+        <img src="img5.jpg" alt="Communication board"/>
+      </div>
+      <div class="gallery-item wide">
+        <img src="img6.jpg" alt="Playground structure"/>
+      </div>
+      <div class="gallery-item">
+        <img src="img7.jpg" alt="Playground amenity"/>
+      </div>
+      <div class="gallery-item wide">
+        <img src="img8.jpg" alt="Playground equipment"/>
+      </div>
+      <div class="gallery-item">
+        <img src="img9.jpg" alt="Playground site"/>
+      </div>
+      <div class="gallery-item">
+        <img src="img10.jpg" alt="Playground maintenance"/>
+      </div>
+      <div class="gallery-item">
+        <img src="img11.jpg" alt="Playground surface"/>
+      </div>
+      <div class="gallery-item">
+        <img src="img12.jpg" alt="Park amenity"/>
+      </div>
+      <div class="gallery-item wide">
+        <img src="img13.jpg" alt="Playground project"/>
+      </div>
+      <div class="gallery-item tall">
+        <img src="img14.jpg" alt="Playground safety"/>
+      </div>
+      <div class="gallery-item">
+        <img src="img15.jpg" alt="Playground completed"/>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-links">
+    <a href="index.html">Home</a>
+    <a href="new-build.html">New Construction</a>
+    <a href="maintenance.html">Maintenance</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="index.html#contact">Contact</a>
+  </div>
+  <p><strong>Build Play Contracting</strong> · Playground Services · Phoenix, AZ</p>
+  <p style="margin-top: 8px;">CPSI-Certified · ASTM · CPSC · ADA Standards</p>
+</footer>
+
+<script>
+  const obs = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
+
+  const hamburger = document.getElementById('hamburger');
+  const navMobile = document.getElementById('nav-mobile');
+  hamburger.addEventListener('click', () => {
+    hamburger.classList.toggle('open');
+    navMobile.classList.toggle('open');
+  });
+  navMobile.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      hamburger.classList.remove('open');
+      navMobile.classList.remove('open');
+    });
+  });
+</script>
+</body>
+</html>

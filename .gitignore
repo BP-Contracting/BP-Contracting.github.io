@@ -1,0 +1,9 @@
+# Local-only backup of full-resolution original images — do not deploy
+originals_backup/
+
+# macOS clutter
+.DS_Store
+
+# Scratch / work-in-progress files not part of the live site
+palettes-preview.html
+totalplaycare.html
