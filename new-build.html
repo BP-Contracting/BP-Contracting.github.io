@@ -58,12 +58,13 @@ section { padding: 96px 5%; }
 .section-title { font-family: 'Nunito Sans', sans-serif; font-size: clamp(32px, 4vw, 48px); font-weight: 700; color: var(--charcoal); line-height: 1.15; margin-bottom: 16px; }
 .section-sub { font-size: 17px; color: var(--mid); line-height: 1.7; max-width: 520px; margin-bottom: 56px; }
 .services { background: var(--offwhite); }
-.service-group { margin-bottom: 56px; }
-.service-group-title { font-size: 11px; font-weight: 500; letter-spacing: 0.12em; text-transform: uppercase; color: var(--mid); margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--light); }
-.service-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
-.service-card { background: white; border-radius: 10px; padding: 20px; border: 1px solid rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s; }
+.service-group { display: grid; grid-template-columns: 170px 1fr; gap: 40px; align-items: start; margin: 0; padding: 32px 0; border-top: 1px solid var(--light); }
+.service-group:first-of-type { border-top: none; padding-top: 8px; }
+.service-group-title { font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--navy); margin: 4px 0 0; padding: 0; border-bottom: none; }
+.service-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap: 14px; }
+.service-card { background: white; border-radius: 12px; padding: 22px; border: 1px solid rgba(0,0,0,0.06); transition: transform 0.2s, box-shadow 0.2s; }
 .service-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
-.service-card h4 { font-size: 14px; font-weight: 500; margin-bottom: 6px; color: var(--charcoal); }
+.service-card h4 { font-size: 15px; font-weight: 600; margin-bottom: 6px; color: var(--charcoal); }
 .service-card p { font-size: 13px; color: var(--mid); line-height: 1.55; }
 .contact { background: white; }
 .contact-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: start; }
@@ -135,6 +136,7 @@ footer strong { color: white; }
   section { padding: 60px 6%; }
   .section-title { font-size: 28px; }
   .section-sub { font-size: 15px; margin-bottom: 36px; }
+  .service-group { grid-template-columns: 1fr; gap: 14px; padding: 24px 0; }
   .service-cards { grid-template-columns: 1fr 1fr; gap: 10px; }
   .inspection-cards { grid-template-columns: 1fr 1fr !important; }
   .gallery-grid { grid-template-columns: 1fr 1fr !important; }
