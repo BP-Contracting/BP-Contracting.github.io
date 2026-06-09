@@ -341,7 +341,7 @@ footer strong { color: white; }
       </div>
       <div class="fade-up">
         <div style="background: white; border-radius: 14px; padding: 36px;">
-          <form name="quote-request" method="POST" data-netlify="true">
+          <form id="quote-form">
             <div class="form-row">
               <div class="form-group">
                 <label>First name</label>
@@ -411,6 +411,31 @@ footer strong { color: white; }
     a.addEventListener('click', () => {
       hamburger.classList.remove('open');
       navMobile.classList.remove('open');
+    });
+  });
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+  emailjs.init('Dtn6RlF79CBh1xpFQ');
+  document.getElementById('quote-form').addEventListener('submit', function(e) {
+    e.preventDefault();
+    var form = e.target;
+    var btn = form.querySelector('button[type="submit"]');
+    btn.textContent = 'Sending...';
+    btn.disabled = true;
+    emailjs.send('service_p00jtzc', 'template_d3qmuw7', {
+      from_name: form.first_name.value + ' ' + form.last_name.value,
+      reply_to: form.email.value,
+      phone: form.phone.value,
+      service: form.service_type.value,
+      message: form.message.value
+    }).then(function() {
+      btn.textContent = 'Sent!';
+      form.reset();
+    }, function() {
+      btn.textContent = 'Send Request →';
+      btn.disabled = false;
+      alert('Something went wrong. Please try again or call us at (480) 639-8437.');
     });
   });
 </script>
